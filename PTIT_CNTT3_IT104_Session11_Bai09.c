@@ -20,33 +20,34 @@ Node* createNode(int value) {
 // Hàm in ra danh sách liên kết đôi từ đầu đến cuối
 void printList(Node* head) {
     Node* temp = head;
+    printf("Danh sach lien ket doi:\n");
     while (temp != NULL) {
-        printf("%d", temp->data);
-        if (temp->next != NULL) {
-            printf("<->");
-        } else {
-            printf("->NULL");
-        }
+        printf("%d\n", temp->data);
         temp = temp->next;
     }
-    printf("\n");
 }
 
-// Hàm xóa phần tử
-void deleteHead(Node** head) {
-    // Kiểm tra nếu danh sách rỗng
-    if (*head == NULL) {
-        return;
+// Hàm đảo ngược
+Node* reverseList(Node* head) {
+    Node* current = head;
+    Node* temp = NULL;
+
+    while (current != NULL) {
+        // Hoán đổi con trỏ next và prev
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+
+        // Di chuyển sang phần tử trước đó
+        current = current->prev;
     }
 
-    Node* temp = *head;         // Lấy node đầu tiên
-    *head = (*head)->next;      // Di chuyển head sang node kế tiếp
-
-    if (*head != NULL) {
-        (*head)->prev = NULL;   // Gỡ liên kết ngược nếu còn phần tử sau
+    // Nếu danh sách không rỗng
+    if (temp != NULL) {
+        head = temp->prev;
     }
 
-    free(temp); // Giải phóng bộ nhớ node đầu
+    return head;
 }
 // Giải phóng bộ nhớ của toàn bộ danh sách
 void freeList(Node* head) {
@@ -82,10 +83,9 @@ int main() {
 
     Node* head = node1;
 
-    printf("Danh sach lien ket doi:\n");
     printList(head);
-    printf("Sau khi xoa phan tu dau cua danh sach:\n");
-    deleteHead(&head);
+    printf("Danh sach sau khi dao nguoc:\n");
+    head = reverseList(head);
     printList(head);
 
     freeList(head);
